@@ -1,6 +1,8 @@
+import { API_BASE } from './api';
+
 export const logEvent = async (userId, role, actionType, targetEntity, resultStatus, additionalData = {}) => {
   try {
-    await fetch('/api/logs', {
+    await fetch(`${API_BASE}/api/logs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -18,8 +20,8 @@ export const logEvent = async (userId, role, actionType, targetEntity, resultSta
 };
 
 export const getLogs = async () => {
-  const token = localStorage.getItem('healthai_token'); // Can't easily import getToken here without circular deps sometimes, or just import it
-  const response = await fetch('/api/logs', {
+  const token = localStorage.getItem('healthai_token');
+  const response = await fetch(`${API_BASE}/api/logs`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
   if (!response.ok) throw new Error('Failed to fetch logs');
