@@ -7,7 +7,13 @@ const app = express();
 const PORT = 5000;
 const SECRET_KEY = 'healthai_secret_key_123'; // Simple secret for demo
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://health-ai-platform-1.onrender.com',
+    'http://localhost:5173'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Request Logger (Kullanıcının terminalde istekleri görebilmesi için)
