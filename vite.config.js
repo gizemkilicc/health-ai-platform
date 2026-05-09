@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://health-ai-platform-yo4o.onrender.com',
         changeOrigin: true
       }
     }
