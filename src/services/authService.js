@@ -1,7 +1,8 @@
 import { logEvent } from './auditService';
+import { API_BASE } from './api';
 
 export const registerUser = async (userData) => {
-  const response = await fetch('/api/auth/register', {
+  const response = await fetch(`${API_BASE}/api/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(userData)
@@ -17,7 +18,7 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (email, password) => {
-  const response = await fetch('/api/auth/login', {
+  const response = await fetch(`${API_BASE}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
@@ -54,7 +55,7 @@ export const getToken = () => {
 
 export const getAllUsers = async () => {
   const token = getToken();
-  const response = await fetch('/api/users', {
+  const response = await fetch(`${API_BASE}/api/users`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
   if (!response.ok) throw new Error('Failed to fetch users');
@@ -63,9 +64,9 @@ export const getAllUsers = async () => {
 
 export const toggleUserStatus = async (userId, isActive) => {
   const token = getToken();
-  const response = await fetch(`/api/users/${userId}/status`, {
+  const response = await fetch(`${API_BASE}/api/users/${userId}/status`, {
     method: 'PUT',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
@@ -78,9 +79,9 @@ export const toggleUserStatus = async (userId, isActive) => {
 
 export const updateProfile = async (profileData) => {
   const token = getToken();
-  const response = await fetch('/api/users/me', {
+  const response = await fetch(`${API_BASE}/api/users/me`, {
     method: 'PUT',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
@@ -91,8 +92,6 @@ export const updateProfile = async (profileData) => {
     throw new Error(errorData.error || 'Failed to update profile');
   }
   const data = await response.json();
-  
-  // Update local storage user data
   const user = getCurrentUser();
   if (user) {
     const updatedUser = { ...user, ...data };
@@ -103,23 +102,19 @@ export const updateProfile = async (profileData) => {
 
 export const exportUserData = async () => {
   const token = getToken();
-  const response = await fetch('/api/users/me/export', {
+  const response = await fetch(`${API_BASE}/api/users/me/export`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
-  if (!response.ok) {
-    throw new Error('Failed to export data');
-  }
+  if (!response.ok) throw new Error('Failed to export data');
   return await response.json();
 };
 
 export const deleteAccount = async () => {
   const token = getToken();
-  const response = await fetch('/api/users/me', {
+  const response = await fetch(`${API_BASE}/api/users/me`, {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${token}` }
   });
-  if (!response.ok) {
-    throw new Error('Failed to delete account');
-  }
+  if (!response.ok) throw new Error('Failed to delete account');
   logoutUser();
 };
